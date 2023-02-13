@@ -17,3 +17,8 @@ jobs:
         run: npm run deploy
         env:
           GH_PAGES_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
+          EMAIL: ${{ secrets.EMAIL }}
+          NAME: ${{ secrets.NAME }}
+          run: |
+            git config --global user.email "$EMAIL"
+            git config --global user.name "$NAME"
