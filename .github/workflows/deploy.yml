@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Setting up Git
-        uses: fregante/setup-git-user@v1
       - name: Install dependencies
         run: npm install
       - name: Deploy to GitHub Pages
