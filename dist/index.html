@@ -2,13 +2,103 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-    <script type="module" crossorigin src="/assets/index-ec808ebb.js"></script>
+    <title>Calendar App</title>
+    <script type="module" crossorigin src="/assets/index-02a66bc3.js"></script>
+    <link rel="stylesheet" href="/assets/index-4bcd3f1f.css">
   </head>
   <body>
     <div id="app"></div>
+    <main>
+
+      <section class="filters">
+        <div class="filters__wrapper">
+          <h2 class="filters__title">Фильтры</h2>
+          <div class="filter__startTime startTime">
+            <label for="" class="startTime__title">Время начала</label>
+            <select name="" id="" class="startTime__list">
+              <option value="" class="startTime__listItem">12:30</option>
+            </select>
+          </div>
+          <div class="filter__duration duration">
+            <label for="" class="duration__title">Длительность</label>
+            <select name="" id="" class="duration__list">
+              <option value="" class="duration__listItem">1 час</option>
+              <option value="" class="duration__listItem">2 часа</option>
+              <option value="" class="duration__listItem">3 часа</option>
+              <option value="" class="duration__listItem">4 часа</option>
+            </select>
+          </div>
+          <div class="filter__location location">
+            <label for="" class="location__title">Место</label>
+            <select name="" id="" class="location__list">
+              <option value="" class="location__listItem">СДЮШОР</option>
+              <option value="" class="location__listItem">ГСК "Геолог"</option>
+              <option value="" class="location__listItem">Олимпиский</option>
+              <option value="" class="location__listItem">Площадь Революции</option>
+            </select>
+          </div>
+          <div class="filter__participant participant">
+            <label for="" class="participant__title">Участники</label>
+            <select name="" id="" class="participant__list">
+              <option value="" class="participant__listItem">Водитель</option>
+              <option value="" class="participant__listItem">Бабушка</option>
+              <option value="" class="participant__listItem">Тренер</option>
+              <option value="" class="participant__listItem">Анна Петровна</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="events">
+        <div class="events__header">
+          <p class="events__date">15 сентября</p>
+          <button class="events__addButton button button--add">+</button>
+        </div>
+        <div class="events__list"></div>
+      </section>
+
+      <section class="calendar">
+        <div id="calendar"></div>
+      </section>
+    </main>
+
+    <div class="events__addPopup addEventPopup collapse">
+      <form action="" class="addEventPopup__form">
+        <div class="addEventPopup__field">
+          <label for="event-title" class="addEventPopup__label">Название</label>
+          <input id="event-title" type="text" class="addEventPopup__input" placeholder="Название">
+        </div>
+        <div class="addEventPopup__field">
+          <label for="event-date" class="addEventPopup__label">Дата</label>
+          <input id="event-date" type="date" class="addEventPopup__input" placeholder="Дата">
+        </div>
+        <div class="addEventPopup__field">
+          <label for="event-startTime" class="addEventPopup__label">Время начала</label>
+          <input id="event-startTime" type="time" class="addEventPopup__input" placeholder="Время начала">
+        </div>
+        <div class="addEventPopup__field">
+          <label for="event-duration" class="addEventPopup__label">Длительность</label>
+          <input id="event-duration" type="" class="addEventPopup__input" placeholder="Длительность">
+        </div>
+        <div class="addEventPopup__field">
+          <label for="event-location" class="addEventPopup__label">Место</label>
+          <input id="event-location" type="text" class="addEventPopup__input" placeholder="Место">
+        </div>
+        <div class="addEventPopup__field">
+          <label for="event-participants" class="addEventPopup__label">Участники</label>
+          <input id="event-participants" list="participantsList" class="addEventPopup__input" placeholder="Участники">
+          <datalist id="participantsList" class="addEventPopup__participantsList">
+            <option class="addEventPopup__participantItem" value=""></option>
+            <option class="addEventPopup__participantItem" value=""></option>
+            <option class="addEventPopup__participantItem" value=""></option>
+          </datalist>
+        </div>
+        <button class="addEventPopup__submitButton button button--submit">Добавить</button>
+      </form>
+    </div>
     
   </body>
 </html>
+

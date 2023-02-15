@@ -1,6 +1,7 @@
-import { eventsDateElem } from "./events.js";
+import { eventsDateElem, renderEvents } from "./events.js";
 
 const calendarElem = document.querySelector("#calendar");
+let currentDate = new Date();
 let mon = 1;
 let d = new Date(2023, mon);
 let table =
@@ -30,12 +31,13 @@ calendarElem.innerHTML = table;
 const calendarTable = document.querySelector(".calendar__table");
 
 calendarTable.addEventListener("click", (e) => {
-  let currentDate = new Date();
+  let calDate = new Date();
   if (Number(e.target.textContent)) {
-    currentDate.setDate(e.target.textContent);
-    eventsDateElem.innerHTML = currentDate.toLocaleString("ru-ru", {
+    calDate.setDate(e.target.textContent);
+    eventsDateElem.innerHTML = calDate.toLocaleString("ru-ru", {
       month: "long",
       day: "numeric",
     });
   }
+  renderEvents(calDate);
 });

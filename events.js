@@ -1,3 +1,4 @@
+
 const eventsDateElem = document.querySelector(".events__date");
 const eventAddButtonElem = document.querySelector(".events__addButton");
 const eventAddPopupElem = document.querySelector(".events__addPopup");
@@ -10,7 +11,7 @@ if (localStorage.getItem('eventsList')) {
     Events: [
       {
         title: "Соревнование по лёгкой атлетике",
-        date: "14.02.2023",
+        date: "2023-02-15",
         startTime: "14:30",
         duration: "4",
         location: "Бауманская",
@@ -18,7 +19,7 @@ if (localStorage.getItem('eventsList')) {
       },
       {
         title: "Воллейбол",
-        date: "14.02.2023",
+        date: "2023-02-16",
         startTime: "12:30",
         duration: "1",
         location: "Сокольники",
@@ -27,29 +28,50 @@ if (localStorage.getItem('eventsList')) {
     ],
   };
 }
+let currentDate = new Date();
+let activeDate;
 
-function renderEvents() {
+
+function renderEvents(eventsOnDate) {
+  activeDate = eventsOnDate;
+  let onDateEventListObj = {
+    Events: []
+  };
+
+  eventListObj.Events.map(item => {
+    let itemDate = new Date(item['date']);
+
+    if (eventsOnDate.getDate() === itemDate.getDate()
+        && eventsOnDate.getMonth() === itemDate.getMonth()
+        && eventsOnDate.getFullYear() === itemDate.getFullYear()) {
+      onDateEventListObj.Events.push(item);
+    }
+  });
+
   const eventsElem = document.querySelector(".events__list");
   eventsElem.innerHTML = '';
 
-  for (let i = 0; i < eventListObj.Events.length; i++) {
+  for (let i = 0; i < onDateEventListObj.Events.length; i++) {
     let event = document.createElement("article");
     event.classList.add("events_listItem", "eventItem");
-    event.innerHTML = `<p class="eventItem__title">${
-      eventListObj.Events[i].title
+    event.innerHTML = `<div class="eventItem__controlBlock"><span class="eventItem__controlItem eventItem__controlItem--edit"></span>
+        <span class="eventItem__controlItem eventItem__controlItem--del"></span>
+        </div>
+  <p class="eventItem__title">${
+        onDateEventListObj.Events[i].title
     }</p>                                                             
       <div class="eventItem__row">                                                                                                
       <span class="eventItem__startTime">Время начала: <span class="eventItem__startTimeSpan">${
-        eventListObj.Events[i].startTime
+        onDateEventListObj.Events[i].startTime
       }</span></span>                      
       <span class="eventItem__duration">\ Длительность: <span class="eventItem__durationSpan">${
-        eventListObj.Events[i].duration
+        onDateEventListObj.Events[i].duration
       }</span></span>              
       </div>                                                                                                                      
       <p class="eventItem__location">Место: <span class="eventItem__locationSpan">${
-        eventListObj.Events[i].location
+        onDateEventListObj.Events[i].location
       }</span></p>                               
-      <p class="eventItem__participants">Участники: <span class="eventItem__participantsSpan">${eventListObj.Events[
+      <p class="eventItem__participants">Участники: <span class="eventItem__participantsSpan">${onDateEventListObj.Events[
         i
       ].participants.join(",")}</span></p>`;
     eventsElem.appendChild(event);
@@ -57,8 +79,7 @@ function renderEvents() {
 
   localStorage.setItem("eventsList", JSON.stringify(eventListObj));
 }
-renderEvents();
-const currentDate = new Date();
+renderEvents(currentDate);
 
 eventsDateElem.innerHTML = currentDate.toLocaleString("ru-ru", {
   month: "long",
@@ -88,9 +109,8 @@ eventAddPopupFormElem.addEventListener("submit", (e) => {
     location: eventLocationElem.value,
     participants: eventParticipantsElem.value.split(','),
   });
-  renderEvents();
+  renderEvents(activeDate);
 
-  //console.log(eventListObj)
 });
 
-export { eventsDateElem };
+export { eventsDateElem, renderEvents };
