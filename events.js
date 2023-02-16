@@ -52,9 +52,9 @@ function renderEvents(eventsOnDate) {
   eventsElem.innerHTML = '';
 
   onDateEventListObj.Events.forEach((item) => {
-    let event = document.createElement("article");
-    event.classList.add("events_listItem", "eventItem");
-    event.innerHTML = `<div class="eventItem__controlBlock"><span class="eventItem__controlItem button button--edit"></span>
+    //let event = document.createElement("article");
+    //event.classList.add("events_listItem", "eventItem");
+    let event = `<article class="events_listItem eventItem"><div class="eventItem__controlBlock"><span class="eventItem__controlItem button button--save collapse"></span><span class="eventItem__controlItem button button--edit"></span>
         <span class="eventItem__controlItem button button--del"></span>
         </div>
       <p class="eventItem__title">${item.title}</p>                                                             
@@ -64,14 +64,15 @@ function renderEvents(eventsOnDate) {
       </div>                                                                                                                      
       <p class="eventItem__location">Место: <span class="eventItem__locationSpan">${item.location}</span></p>                               
       <p class="eventItem__participants">Участники: 
-      <span class="eventItem__participantsSpan">${item.participants.join(",")}</span></p>`;
-    eventsElem.appendChild(event);
+      <span class="eventItem__participantsSpan">${item.participants.join(",")}</span></p></article>`;
+    eventsElem.innerHTML += event;
   });
 
-  //const editButton = event.querySelector('.button--edit');
-  const delButton = document.querySelectorAll('.button--del');
+  const editButtons = document.querySelectorAll('.button--edit');
+  const delButtons = document.querySelectorAll('.button--del');
+  const saveButtons = document.querySelectorAll('.button--save');
 
-  delButton.forEach( (item, index) => {
+  delButtons.forEach( (item, index) => {
     item.addEventListener('click', (e) => {
       e.target.parentElement.parentElement.remove();
       eventListObj.Events.forEach((eventListItem, i) => {
@@ -80,9 +81,45 @@ function renderEvents(eventsOnDate) {
           console.log(eventListObj.Events);
           renderEvents(activeDate);
         }
-      })
+      });
     });
-  })
+  });
+
+  editButtons.forEach((item, index) => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      item.classList.add('collapse');
+      saveButtons[index].classList.remove('collapse');
+      let currentElem = e.target.parentElement.parentElement,
+          currentEventTitleElem = currentElem.querySelector('.eventItem__title'),
+          currentEventStartTimeElem = currentElem.querySelector('.eventItem__startTimeSpan'),
+          currentEventDurationElem = currentElem.querySelector('.eventItem__durationSpan'),
+          currentEventLocationElem = currentElem.querySelector('.eventItem__locationSpan'),
+          currentEventParticipantsElem = currentElem.querySelector('.eventItem__participantsSpan');
+
+
+      currentEventTitleElem.innerHTML = `<input type="text" value="${currentEventTitleElem.textContent}">`;
+      currentEventStartTimeElem.innerHTML = `<input type="time" value="${currentEventStartTimeElem.textContent}">`;
+      currentEventDurationElem.innerHTML = `<input type="text" value="${currentEventDurationElem.textContent}">`;
+      currentEventLocationElem.innerHTML = `<input type="text" value="${currentEventLocationElem.textContent}">`;
+      currentEventParticipantsElem.innerHTML = `<input type="text" value="${currentEventParticipantsElem.textContent}">`;
+
+      saveButtons[index].addEventListener('click', (e) => {
+        e.preventDefault();
+        eventListObj.Events.forEach((eventListItem, i) => {
+          if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
+            eventListObj.Events[i].title = currentEventTitleElem.children[0].value;
+            eventListObj.Events[i].startTime = currentEventStartTimeElem.children[0].value;
+            eventListObj.Events[i].duration = currentEventDurationElem.children[0].value;
+            eventListObj.Events[i].location = currentEventLocationElem.children[0].value;
+            eventListObj.Events[i].participants = currentEventParticipantsElem.children[0].value.split(',');
+
+            renderEvents(activeDate);
+          }
+        });
+      });
+    });
+  });
 
 
   localStorage.setItem("eventsList", JSON.stringify(eventListObj));
@@ -102,7 +139,7 @@ eventAddButtonElem.addEventListener("click", () => {
 
 const eventAddPopupFormElem = document.querySelector(".addEventPopup__form");
 
-eventAddPopupFormElem.addEventListener("submit", (e) => {
+eventAddPopupFormElem.addEventListener("submit", e => {
   const eventTitleElem = document.querySelector('#event-title');
   const eventDateElem = document.querySelector('#event-date');
   const eventStartTimeElem = document.querySelector('#event-startTime');
