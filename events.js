@@ -51,35 +51,45 @@ function renderEvents(eventsOnDate) {
   const eventsElem = document.querySelector(".events__list");
   eventsElem.innerHTML = '';
 
-  for (let i = 0; i < onDateEventListObj.Events.length; i++) {
+  onDateEventListObj.Events.forEach((item) => {
     let event = document.createElement("article");
     event.classList.add("events_listItem", "eventItem");
-    event.innerHTML = `<div class="eventItem__controlBlock"><span class="eventItem__controlItem eventItem__controlItem--edit"></span>
-        <span class="eventItem__controlItem eventItem__controlItem--del"></span>
+    event.innerHTML = `<div class="eventItem__controlBlock"><span class="eventItem__controlItem button button--edit"></span>
+        <span class="eventItem__controlItem button button--del"></span>
         </div>
-  <p class="eventItem__title">${
-        onDateEventListObj.Events[i].title
-    }</p>                                                             
+      <p class="eventItem__title">${item.title}</p>                                                             
       <div class="eventItem__row">                                                                                                
-      <span class="eventItem__startTime">Время начала: <span class="eventItem__startTimeSpan">${
-        onDateEventListObj.Events[i].startTime
-      }</span></span>                      
-      <span class="eventItem__duration">\ Длительность: <span class="eventItem__durationSpan">${
-        onDateEventListObj.Events[i].duration
-      }</span></span>              
+      <span class="eventItem__startTime">Время начала: <span class="eventItem__startTimeSpan">${item.startTime}</span></span>                      
+      <span class="eventItem__duration">\ Длительность: <span class="eventItem__durationSpan">${item.duration}</span></span>              
       </div>                                                                                                                      
-      <p class="eventItem__location">Место: <span class="eventItem__locationSpan">${
-        onDateEventListObj.Events[i].location
-      }</span></p>                               
-      <p class="eventItem__participants">Участники: <span class="eventItem__participantsSpan">${onDateEventListObj.Events[
-        i
-      ].participants.join(",")}</span></p>`;
+      <p class="eventItem__location">Место: <span class="eventItem__locationSpan">${item.location}</span></p>                               
+      <p class="eventItem__participants">Участники: 
+      <span class="eventItem__participantsSpan">${item.participants.join(",")}</span></p>`;
     eventsElem.appendChild(event);
-  }
+  });
+
+  //const editButton = event.querySelector('.button--edit');
+  const delButton = document.querySelectorAll('.button--del');
+
+  delButton.forEach( (item, index) => {
+    item.addEventListener('click', (e) => {
+      e.target.parentElement.parentElement.remove();
+      eventListObj.Events.forEach((eventListItem, i) => {
+        if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
+          eventListObj.Events.splice(i, 1);
+          console.log(eventListObj.Events);
+          renderEvents(activeDate);
+        }
+      })
+    });
+  })
+
 
   localStorage.setItem("eventsList", JSON.stringify(eventListObj));
 }
 renderEvents(currentDate);
+
+
 
 eventsDateElem.innerHTML = currentDate.toLocaleString("ru-ru", {
   month: "long",
