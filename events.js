@@ -57,13 +57,13 @@ function renderEvents(eventsOnDate = activeDate) {
 
   //Отрисовка собыйти на страницу
   onDateEventListObj.Events.forEach((item) => {
-    let event = `<article class="events_listItem eventItem"><div class="eventItem__controlBlock"><span class="eventItem__controlItem button button--save collapse"></span><span class="eventItem__controlItem button button--edit"></span>
-        <span class="eventItem__controlItem button button--del"></span>
+    let event = `<article class="events_listItem eventItem"><div class="eventItem__controlBlock"><span class="eventItem__controlItem btn btn--save collapse"></span><span class="eventItem__controlItem btn btn--edit"></span>
+        <span class="eventItem__controlItem btn btn--del"></span>
         </div>
       <p class="eventItem__title">${item.title}</p>                                                             
       <div class="eventItem__row">                                                                                                
       <span class="eventItem__startTime">Время начала: <span class="eventItem__startTimeSpan">${item.startTime}</span></span>                      
-      <span class="eventItem__duration">\ Длительность: <span class="eventItem__durationSpan">${item.duration}</span></span>              
+      <span class="eventItem__duration">\\ Длительность: <span class="eventItem__durationSpan">${item.duration}</span></span>              
       </div>                                                                                                                      
       <p class="eventItem__location">Место: <span class="eventItem__locationSpan">${item.location}</span></p>                               
       <p class="eventItem__participants">Участники: 
@@ -71,9 +71,9 @@ function renderEvents(eventsOnDate = activeDate) {
     eventsElem.innerHTML += event;
   });
 
-  const editButtons = document.querySelectorAll('.button--edit');
-  const delButtons = document.querySelectorAll('.button--del');
-  const saveButtons = document.querySelectorAll('.button--save');
+  const editButtons = document.querySelectorAll('.btn--edit');
+  const delButtons = document.querySelectorAll('.btn--del');
+  const saveButtons = document.querySelectorAll('.btn--save');
 
   delButtons.forEach( (item, index) => {
     item.addEventListener('click', (e) => {
@@ -167,7 +167,7 @@ eventListObj.Events.map(item => {
   startTimeSet.add(item.startTime);
   durationSet.add(item.duration);
   locationSet.add(item.location);
-  participantSet.add(item.participants);
+  participantSet.add(item.participants.join(','));
 });
 
 const filterStartTimeElem = document.querySelector('#filterStartTime');
@@ -179,7 +179,7 @@ startTimeSet.forEach(item => {
   filterStartTimeElem.innerHTML += startTimeElem;
 });
 
-durationSet.forEach(item => {
+Array.from(durationSet).sort( (a,b) => a - b).forEach(item => {
   let durationElem = `<option value="${item}" className="duration__listItem">${item}</option>`;
   filterDurationElem.innerHTML += durationElem;
 });
@@ -188,7 +188,7 @@ locationSet.forEach(item => {
   filterLocationElem.innerHTML += locationElem;
 });
 participantSet.forEach(item => {
-  let participantsElem = `<option value="${item.join(',')}" className="participants__listItem">${item.join(',')}</option>`;
+  let participantsElem = `<option value="${item}" className="participants__listItem">${item}</option>`;
   filterParticipantsElem.innerHTML += participantsElem;
 });
 
