@@ -1,9 +1,11 @@
+import {filterEventList} from "./filter.js";
 
 const eventsDateElem = document.querySelector(".events__date");
 const eventAddButtonElem = document.querySelector(".events__addButton");
 const eventAddPopupElem = document.querySelector(".events__addPopup");
 let eventListObj = {};
 
+//Проверка localStorage или установка тестовых событий
 if (localStorage.getItem('eventsList')) {
   eventListObj = JSON.parse(localStorage.getItem('eventsList'));
 } else {
@@ -28,19 +30,21 @@ if (localStorage.getItem('eventsList')) {
     ],
   };
 }
+
 let currentDate = new Date();
 let activeDate;
 
-
-function renderEvents(eventsOnDate) {
+function renderEvents(eventsOnDate = activeDate) {
   activeDate = eventsOnDate;
   let onDateEventListObj = {
     Events: []
   };
 
-  eventListObj.Events.map(item => {
-    let itemDate = new Date(item['date']);
+  let filteredList = filterEventList(eventListObj);
 
+  //Проверка на текущую дату
+  filteredList.Events.map(item => {
+    let itemDate = new Date(item['date']);
     if (eventsOnDate.getDate() === itemDate.getDate()
         && eventsOnDate.getMonth() === itemDate.getMonth()
         && eventsOnDate.getFullYear() === itemDate.getFullYear()) {
@@ -51,9 +55,8 @@ function renderEvents(eventsOnDate) {
   const eventsElem = document.querySelector(".events__list");
   eventsElem.innerHTML = '';
 
+  //Отрисовка собыйти на страницу
   onDateEventListObj.Events.forEach((item) => {
-    //let event = document.createElement("article");
-    //event.classList.add("events_listItem", "eventItem");
     let event = `<article class="events_listItem eventItem"><div class="eventItem__controlBlock"><span class="eventItem__controlItem button button--save collapse"></span><span class="eventItem__controlItem button button--edit"></span>
         <span class="eventItem__controlItem button button--del"></span>
         </div>
@@ -78,7 +81,6 @@ function renderEvents(eventsOnDate) {
       eventListObj.Events.forEach((eventListItem, i) => {
         if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
           eventListObj.Events.splice(i, 1);
-          console.log(eventListObj.Events);
           renderEvents(activeDate);
         }
       });
@@ -96,7 +98,6 @@ function renderEvents(eventsOnDate) {
           currentEventDurationElem = currentElem.querySelector('.eventItem__durationSpan'),
           currentEventLocationElem = currentElem.querySelector('.eventItem__locationSpan'),
           currentEventParticipantsElem = currentElem.querySelector('.eventItem__participantsSpan');
-
 
       currentEventTitleElem.innerHTML = `<input type="text" value="${currentEventTitleElem.textContent}">`;
       currentEventStartTimeElem.innerHTML = `<input type="time" value="${currentEventStartTimeElem.textContent}">`;
@@ -121,12 +122,10 @@ function renderEvents(eventsOnDate) {
     });
   });
 
-
   localStorage.setItem("eventsList", JSON.stringify(eventListObj));
 }
+
 renderEvents(currentDate);
-
-
 
 eventsDateElem.innerHTML = currentDate.toLocaleString("ru-ru", {
   month: "long",
@@ -137,8 +136,8 @@ eventAddButtonElem.addEventListener("click", () => {
   eventAddPopupElem.classList.toggle("collapse");
 });
 
+//Добавление нового события
 const eventAddPopupFormElem = document.querySelector(".addEventPopup__form");
-
 eventAddPopupFormElem.addEventListener("submit", e => {
   const eventTitleElem = document.querySelector('#event-title');
   const eventDateElem = document.querySelector('#event-date');
@@ -159,5 +158,12 @@ eventAddPopupFormElem.addEventListener("submit", e => {
   renderEvents(activeDate);
 
 });
+
+let startTimeSet = new Set;
+eventListObj.Events.map(item => {
+  startTimeSet.push(item.startTime);
+  console.log(startTimeSet);
+});
+
 
 export { eventsDateElem, renderEvents };

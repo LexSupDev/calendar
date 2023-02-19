@@ -31,13 +31,14 @@ calendarElem.innerHTML = table;
 const calendarTable = document.querySelector(".calendar__table");
 
 calendarTable.addEventListener("click", (e) => {
-  let calDate = new Date();
   if (Number(e.target.textContent)) {
-    calDate.setDate(e.target.textContent);
-    eventsDateElem.innerHTML = calDate.toLocaleString("ru-ru", {
+    currentDate.setDate(e.target.textContent);
+    eventsDateElem.innerHTML = currentDate.toLocaleString("ru-ru", {
       month: "long",
       day: "numeric",
     });
   }
-  renderEvents(calDate);
+  renderEvents(currentDate);
 });
+
+export {currentDate};
