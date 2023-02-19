@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calendar App</title>
-    <script type="module" crossorigin src="/calendar/assets/index-9624a604.js"></script>
+    <script type="module" crossorigin src="/calendar/assets/index-5b4e1372.js"></script>
     <link rel="stylesheet" href="/calendar/assets/index-efdcf764.css">
   </head>
   <body>
@@ -16,36 +16,40 @@
         <div class="filters__wrapper">
           <h2 class="filters__title">Фильтры</h2>
           <div class="filter__startTime startTime">
-            <label for="" class="startTime__title">Время начала</label>
-            <select name="" id="" class="startTime__list">
-              <option value="" class="startTime__listItem">12:30</option>
+            <label for="filterStartTime" class="startTime__title">Время начала</label>
+            <select name="" id="filterStartTime" class="startTime__list">
+              <option value="0" class="startTime__listItem">Все</option>
+              <option value="12:30" class="startTime__listItem">12:30</option>
             </select>
           </div>
           <div class="filter__duration duration">
-            <label for="" class="duration__title">Длительность</label>
-            <select name="" id="" class="duration__list">
-              <option value="" class="duration__listItem">1 час</option>
-              <option value="" class="duration__listItem">2 часа</option>
-              <option value="" class="duration__listItem">3 часа</option>
-              <option value="" class="duration__listItem">4 часа</option>
+            <label for="filterDuration" class="duration__title">Длительность</label>
+            <select name="" id="filterDuration" class="duration__list">
+              <option value="" class="duration__listItem">Все</option>
+              <option value="1" class="duration__listItem">1 час</option>
+              <option value="2" class="duration__listItem">2 часа</option>
+              <option value="3" class="duration__listItem">3 часа</option>
+              <option value="4" class="duration__listItem">4 часа</option>
             </select>
           </div>
           <div class="filter__location location">
-            <label for="" class="location__title">Место</label>
-            <select name="" id="" class="location__list">
-              <option value="" class="location__listItem">СДЮШОР</option>
-              <option value="" class="location__listItem">ГСК "Геолог"</option>
-              <option value="" class="location__listItem">Олимпиский</option>
-              <option value="" class="location__listItem">Площадь Революции</option>
+            <label for="filterLocation" class="location__title">Место</label>
+            <select name="" id="filterLocation" class="location__list">
+              <option value="" class="location__listItem">Все</option>
+              <option value="СДЮШОР" class="location__listItem">СДЮШОР</option>
+              <option value='ГСК "Геолог"' class="location__listItem">ГСК "Геолог"</option>
+              <option value="Сургут" class="location__listItem">Сургут</option>
+              <option value="Площадь Сокольники" class="location__listItem">Сокольники</option>
             </select>
           </div>
           <div class="filter__participant participant">
-            <label for="" class="participant__title">Участники</label>
-            <select name="" id="" class="participant__list">
-              <option value="" class="participant__listItem">Водитель</option>
-              <option value="" class="participant__listItem">Бабушка</option>
-              <option value="" class="participant__listItem">Тренер</option>
-              <option value="" class="participant__listItem">Анна Петровна</option>
+            <label for="filterParticipants" class="participant__title">Участники</label>
+            <select name="" id="filterParticipants" class="participant__list">
+              <option value="0" class="participant__listItem">Все</option>
+              <option value="Водитель" class="participant__listItem">Водитель</option>
+              <option value="Бабушка" class="participant__listItem">Бабушка</option>
+              <option value="Тренер" class="participant__listItem">Тренер</option>
+              <option value="Анна Петровна" class="participant__listItem">Анна Петровна</option>
             </select>
           </div>
         </div>
