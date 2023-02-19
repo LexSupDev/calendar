@@ -160,10 +160,40 @@ eventAddPopupFormElem.addEventListener("submit", e => {
 });
 
 let startTimeSet = new Set;
+let durationSet = new Set;
+let locationSet = new Set;
+let participantSet = new Set;
 eventListObj.Events.map(item => {
-  startTimeSet.push(item.startTime);
-  console.log(startTimeSet);
+  startTimeSet.add(item.startTime);
+  durationSet.add(item.duration);
+  locationSet.add(item.location);
+  participantSet.add(item.participants);
 });
+
+const filterStartTimeElem = document.querySelector('#filterStartTime');
+const filterDurationElem = document.querySelector('#filterDuration');
+const filterLocationElem = document.querySelector('#filterLocation');
+const filterParticipantsElem = document.querySelector('#filterParticipants');
+startTimeSet.forEach(item => {
+  let startTimeElem = `<option value="${item}" class="startTime__listItem">${item}</option>`;
+  filterStartTimeElem.innerHTML += startTimeElem;
+});
+
+durationSet.forEach(item => {
+  let durationElem = `<option value="${item}" className="duration__listItem">${item}</option>`;
+  filterDurationElem.innerHTML += durationElem;
+});
+locationSet.forEach(item => {
+  let locationElem = `<option value="${item}" className="location__listItem">${item}</option>`;
+  filterLocationElem.innerHTML += locationElem;
+});
+participantSet.forEach(item => {
+  let participantsElem = `<option value="${item.join(',')}" className="participants__listItem">${item.join(',')}</option>`;
+  filterParticipantsElem.innerHTML += participantsElem;
+});
+
+
+
 
 
 export { eventsDateElem, renderEvents };

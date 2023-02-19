@@ -19,14 +19,10 @@ function filterEventList(eventListObj) {
     return item.startTime === filterStartTimeElem.value &&
            item.duration === filterDurationElem.value &&
            item.location === filterLocationElem.value &&
-           item.participants === filterParticipantsElem.value;
+           item.participants.join(',') === filterParticipantsElem.value;
   })
 
-  //console.log(filterDurationElem.value);
-  //console.log(filteredEventList);
   return filteredEventList;
 }
-
-
 
 export {filterEventList};
