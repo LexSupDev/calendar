@@ -15,14 +15,36 @@ function filterEventList(eventListObj) {
     Events: []
   }
 
-  filteredEventList.Events = eventListObj.Events.filter( item => {
+  filteredEventList.Events = eventListObj.Events.slice(0);
+
+  filteredEventList.Events = filteredEventList.Events.filter( item => {
     if (filterStartTimeElem.value) {
       return item.startTime === filterStartTimeElem.value;
     } else {
       return true;
     }
   });
-
+  filteredEventList.Events = filteredEventList.Events.filter( item => {
+    if (filterDurationElem.value) {
+      return item.duration === filterDurationElem.value;
+    } else {
+      return true;
+    }
+  });
+  filteredEventList.Events = filteredEventList.Events.filter( item => {
+    if (filterLocationElem.value) {
+      return item.location === filterLocationElem.value;
+    } else {
+      return true;
+    }
+  });
+  filteredEventList.Events = filteredEventList.Events.filter( item => {
+    if (filterParticipantsElem.value) {
+      return item.participants.join(',') === filterParticipantsElem.value;
+    } else {
+      return true;
+    }
+  });
 
   // filteredEventList.Events = eventListObj.Events.filter( item => {
   //   return item.startTime === filterStartTimeElem.value &&
