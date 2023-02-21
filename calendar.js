@@ -5,7 +5,7 @@ let currentDate = new Date();
 let mon = 1;
 let d = new Date(2023, mon);
 let table =
-  "<table class='calendar__table table table-bordered'><thead class='table-dark'><th>пн</th><th>вт</th><th>ср</th><th>чт</th><th>пт</th><th>сб</th><th>вс</th></thead><tr>";
+  "<table class='calendar__table table table-bordered'><thead><th>пн</th><th>вт</th><th>ср</th><th>чт</th><th>пт</th><th>сб</th><th>вс</th></thead><tr>";
 
 for (let i = 1; i < d.getDay(); i++) {
   table += "<td></td>";
