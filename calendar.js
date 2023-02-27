@@ -13,6 +13,7 @@ for (let i = 1; i < d.getDay(); i++) {
 
 while (d.getMonth() == mon) {
   table += "<td>" + d.getDate() + "</td>";
+  // Лучше всегда сравнивать через ===
   if (d.getDay() % 7 == 0) {
     table += "</tr><tr>";
   }
@@ -28,6 +29,9 @@ table += "</tr></table>";
 
 calendarElem.innerHTML = table;
 
+// Лучше никогда взаимодействие в JS не завязывать на классы, которые используются для стилизации
+// Если кто-то поменяет класс, то календарь перестанет работать абсолютно неожиданно
+// Лучше завести отдельный класс, например .JS-calendar
 const calendarTable = document.querySelector(".calendar__table");
 
 calendarTable.addEventListener("click", (e) => {

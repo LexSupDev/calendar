@@ -13,7 +13,7 @@ if (localStorage.getItem('eventsList')) {
     Events: [
       {
         title: "Соревнование по лёгкой атлетике",
-        date: "2023-02-15",
+        date: "2023-03-15",
         startTime: "14:30",
         duration: "4",
         location: "Бауманская",
@@ -21,7 +21,7 @@ if (localStorage.getItem('eventsList')) {
       },
       {
         title: "Воллейбол",
-        date: "2023-02-16",
+        date: "2023-03-16",
         startTime: "12:30",
         duration: "1",
         location: "Сокольники",
@@ -32,8 +32,12 @@ if (localStorage.getItem('eventsList')) {
 }
 
 let currentDate = new Date();
+// Глобальное состояние это плохо: нет возможности следить за тем кто и как будет менять эту перменную
+// Лучше переписать все функции так, чтобы они принимали активную дату аргументом
 let activeDate;
 
+// Значение по умолчанию очень смущает, непонятно: ты сначала присваиваешь eventOnDate – activeDate
+// А на следующей строке переприсваиваешь их обратно
 function renderEvents(eventsOnDate = activeDate) {
   activeDate = eventsOnDate;
   let onDateEventListObj = {
@@ -43,6 +47,11 @@ function renderEvents(eventsOnDate = activeDate) {
   let filteredList = filterEventList(eventListObj);
 
   //Проверка на текущую дату
+  //
+  // Стоит использовать .forEach() и тогда, внутри делать Events.push()
+  // Но если используешь .map(), то можно сразу присваивать в массив:
+  // onDateEventListObj.Events = filteredList.Events.map()
+  // Посмотри получше как работает map
   filteredList.Events.map(item => {
     let itemDate = new Date(item['date']);
     if (eventsOnDate.getDate() === itemDate.getDate()
@@ -108,6 +117,7 @@ function renderEvents(eventsOnDate = activeDate) {
       saveButtons[index].addEventListener('click', (e) => {
         e.preventDefault();
         eventListObj.Events.forEach((eventListItem, i) => {
+          // Очень непонятно почему вот тут такое сравнение, вот тут бы помог коментарий
           if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
             eventListObj.Events[i].title = currentEventTitleElem.children[0].value;
             eventListObj.Events[i].startTime = currentEventStartTimeElem.children[0].value;
