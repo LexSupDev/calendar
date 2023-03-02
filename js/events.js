@@ -42,7 +42,6 @@ function showActiveDate (activeDate) {
 }
 
 function showEvents (eventListObj, activeDate) {
-  console.log(eventListObj)
   let filteredList = filterEvents(eventListObj);
   let onDateEventListObj = {
     Events: []

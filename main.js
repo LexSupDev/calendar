@@ -13,7 +13,7 @@ function init () {
   renderCalendar(eventListObj, activeDate);
   showActiveDate(activeDate);
   showEvents(eventListObj, activeDate);
-  addFilterHandler();
+  addFilterHandler(eventListObj, activeDate);
   setFiltersData(eventListObj);
   addEventAddHandler(eventListObj, activeDate);
   addFilterHandler(eventListObj, activeDate);
