@@ -9,6 +9,7 @@ function init () {
   addFilterHandler();
   setFiltersData();
   addEventAddHandler();
+  addFilterHandler();
 }
 
 function setFiltersData () {
@@ -58,40 +59,36 @@ function filterEvents () {
   const filterLocationElem = document.querySelector('#filterLocation');
   const filterParticipantsElem = document.querySelector('#filterParticipants');
 
-  let filteredEventList = {
-    Events: []
+  const startTimeFilter = makeFilter(filterStartTimeElem, "startTime");
+  const durationFilter = makeFilter(filterDurationElem, "duration");
+  const participantsFilter = makeFilter(filterParticipantsElem, "participants");
+  const locationFilter = makeFilter(filterLocationElem, "location");
+
+  function makeFilter (elem, param) {
+    return function (item) {
+      if (elem.value) {
+        if (typeof item[param] === 'object') {
+          return item[param].join(',') === elem.value;
+        } else {
+          return item[param] === elem.value;
+        }
+      } else {
+        return true;
+      }
+    }
   }
 
-  filteredEventList.Events = eventListObj.Events.slice(0);
+  let filteredEventList = filterEventList();
 
-  filteredEventList.Events = filteredEventList.Events.filter( item => {
-    if (filterStartTimeElem.value) {
-      return item.startTime === filterStartTimeElem.value;
-    } else {
-      return true;
-    }
-  });
-  filteredEventList.Events = filteredEventList.Events.filter( item => {
-    if (filterDurationElem.value) {
-      return item.duration === filterDurationElem.value;
-    } else {
-      return true;
-    }
-  });
-  filteredEventList.Events = filteredEventList.Events.filter( item => {
-    if (filterLocationElem.value) {
-      return item.location === filterLocationElem.value;
-    } else {
-      return true;
-    }
-  });
-  filteredEventList.Events = filteredEventList.Events.filter( item => {
-    if (filterParticipantsElem.value) {
-      return item.participants.join(',') === filterParticipantsElem.value;
-    } else {
-      return true;
-    }
-  });
+  function filterEventList() {
+    return {
+      Events: eventListObj.Events.slice(0)
+        .filter(startTimeFilter)
+        .filter(durationFilter)
+        .filter(locationFilter)
+        .filter(participantsFilter),
+    };
+  }
 
   return filteredEventList.Events;
 }
@@ -230,11 +227,8 @@ function addButtonsHandler (onDateEventListObj) {
 }
 
 function addFilterHandler () {
-  function addFilterHandler () {
-    const filterWrapper = document.querySelector('.filters__wrapper');
-    filterWrapper.addEventListener('change', () => {showEvents()});
-  }
-  addFilterHandler();
+  const filterWrapper = document.querySelector('.filters__wrapper');
+  filterWrapper.addEventListener('change', () => {showEvents()});
 }
 
 function addEventAddHandler () {
