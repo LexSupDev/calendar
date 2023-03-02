@@ -183,6 +183,7 @@ function addButtonsHandler (onDateEventListObj) {
           eventListObj.Events.splice(i, 1);
           setLocalStorage();
           setFiltersData();
+          renderCalendar();
           showEvents();
         }
       });
@@ -218,6 +219,7 @@ function addButtonsHandler (onDateEventListObj) {
             eventListObj.Events[i].participants = currentEventParticipantsElem.children[0].value.split(',');
             setLocalStorage();
             setFiltersData();
+            renderCalendar();
             showEvents();
           }
         });
@@ -261,6 +263,7 @@ function addEventAddHandler () {
     });
     setLocalStorage();
     setFiltersData();
+    renderCalendar();
     showEvents();
   });
 }
@@ -279,11 +282,24 @@ function renderCalendar () {
     }
 
     while (runtimeActiveDate.getMonth() === month) {
-      if (runtimeActiveDate.getDate() === day) {
+
+      if (hasEvents(runtimeActiveDate) && runtimeActiveDate.getDate() === day) {
+        table += "<td class='table-active has-event'>" + runtimeActiveDate.getDate() + "</td>";
+      } else if (runtimeActiveDate.getDate() === day) {
         table += "<td class='table-active'>" + runtimeActiveDate.getDate() + "</td>";
+      } else if (hasEvents(runtimeActiveDate)) {
+        table += "<td class='has-event'>" + runtimeActiveDate.getDate() + "</td>";
       } else {
         table += "<td>" + runtimeActiveDate.getDate() + "</td>";
       }
+      //
+      //
+      // if (runtimeActiveDate.getDate() === day) {
+      //   table += "<td class='table-active'>" + runtimeActiveDate.getDate() + "</td>";
+      // } else {
+      //   table += "<td>" + runtimeActiveDate.getDate() + "</td>";
+      // }
+
       if (runtimeActiveDate.getDay() % 7 === 0) {
         table += "</tr><tr>";
       }
@@ -298,6 +314,17 @@ function renderCalendar () {
 
     table += "</tr></table>";
     calendarElem.innerHTML = table;
+  }
+
+  function hasEvents (checkingDate) {
+
+    let DayEvents = eventListObj.Events.filter(item =>
+      new Date(item.date).getDate() === checkingDate.getDate() &&
+      new Date(item.date).getMonth() === checkingDate.getMonth() &&
+      new Date(item.date).getFullYear() === checkingDate.getFullYear()
+    );
+
+    return !!DayEvents.length;
   }
 
   function handlerDateChange (e) {
