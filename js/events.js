@@ -1,5 +1,5 @@
 import {filterEvents , setFiltersData} from "./filter.js";
-import {renderCalendar} from "./calendar.js";
+import {calendar} from "./calendar.js";
 
 function readLocalStorage () {
   if (localStorage.getItem('eventsList')) {
@@ -76,7 +76,6 @@ function showEvents (eventListObj, activeDate) {
   });
 
   addButtonsHandler(onDateEventListObj, eventListObj, activeDate);
-  addEventAddHandler(eventListObj, activeDate);
 }
 
 function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
@@ -92,7 +91,7 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
           eventListObj.Events.splice(i, 1);
           setLocalStorage(eventListObj);
           setFiltersData(eventListObj);
-          renderCalendar(eventListObj, activeDate);
+          calendar(eventListObj, activeDate);
           showEvents(eventListObj, activeDate);
         }
       });
@@ -128,7 +127,7 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
             eventListObj.Events[i].participants = currentEventParticipantsElem.children[0].value.split(',');
             setLocalStorage(eventListObj);
             setFiltersData(eventListObj);
-            renderCalendar(eventListObj, activeDate);
+            calendar(eventListObj, activeDate);
             showEvents(eventListObj, activeDate);
           }
         });
@@ -137,50 +136,57 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
   });
 }
 
-function addEventAddHandler (eventListObj, activeDate) {
+function handlerAddPopup () {
 
-  const eventAddButtonElem = document.querySelector(".events__addButton");
-  const eventAddPopupElem = document.querySelector(".events__addPopup");
+  const newEventPopupElem = document.querySelector(".events__addPopup");
 
-  eventAddButtonElem.removeEventListener("click", () => {
-    console.log('remove')
-  });
+  if (newEventPopupElem.classList.contains('collapse')) {
+    newEventPopupElem.classList.remove("collapse");
+  } else {
+    newEventPopupElem.classList.add("collapse");
+  }
 
-  eventAddButtonElem.addEventListener("click", () => {
-    if (eventAddPopupElem.classList.contains('collapse')) {
-      eventAddPopupElem.classList.remove("collapse");
-    } else {
-      eventAddPopupElem.classList.add("collapse");
-    }
-    console.log('add')
-    console.log(activeDate)
-  });
-
-  //Добавление нового события
-  const eventAddPopupFormElem = document.querySelector(".addEventPopup__form");
-
-  eventAddPopupFormElem.addEventListener("submit", e => {
-    const eventTitleElem = document.querySelector('#event-title');
-    const eventDateElem = document.querySelector('#event-date');
-    const eventStartTimeElem = document.querySelector('#event-startTime');
-    const eventDurationElem = document.querySelector('#event-duration');
-    const eventLocationElem = document.querySelector('#event-location');
-    const eventParticipantsElem = document.querySelector('#event-participants');
-    e.preventDefault();
-
-    eventListObj.Events.push({
-      title: eventTitleElem.value,
-      date: eventDateElem.value,
-      startTime: eventStartTimeElem.value,
-      duration: eventDurationElem.value,
-      location: eventLocationElem.value,
-      participants: eventParticipantsElem.value.split(','),
-    });
-    setLocalStorage(eventListObj);
-    setFiltersData(eventListObj);
-    renderCalendar(eventListObj, activeDate);
-    showEvents(eventListObj, activeDate);
-  });
 }
 
-export {readLocalStorage, setLocalStorage, showActiveDate, showEvents, addEventAddHandler};
+function setNewEvent (eventListObj) {
+  const eventTitleElem = document.querySelector('#event-title');
+  const eventDateElem = document.querySelector('#event-date');
+  const eventStartTimeElem = document.querySelector('#event-startTime');
+  const eventDurationElem = document.querySelector('#event-duration');
+  const eventLocationElem = document.querySelector('#event-location');
+  const eventParticipantsElem = document.querySelector('#event-participants');
+
+  eventListObj.Events.push({
+    title: eventTitleElem.value,
+    date: eventDateElem.value,
+    startTime: eventStartTimeElem.value,
+    duration: eventDurationElem.value,
+    location: eventLocationElem.value,
+    participants: eventParticipantsElem.value.split(','),
+  });
+}
+function addEvent (eventListObj) {
+  function handlerAddEvent (e, eventListObj, activeDate) {
+    //console.log(activeDate)
+    e.preventDefault();
+    setNewEvent(eventListObj);
+    setLocalStorage(eventListObj);
+    setFiltersData(eventListObj);
+    calendar(eventListObj, activeDate);
+    showEvents(eventListObj, activeDate);
+  }
+
+  const eventAddPopupFormElem = document.querySelector(".addEventPopup__form");
+  console.log(calendar.activeDate)
+  eventAddPopupFormElem.addEventListener("submit", (e) => {handlerAddEvent(e, eventListObj, calendar.activeDate)});
+
+}
+
+
+const newEventButtonElem = document.querySelector('.events__addButton');
+newEventButtonElem.addEventListener("click", handlerAddPopup);
+
+
+
+
+export {readLocalStorage, setLocalStorage, showActiveDate, showEvents, addEvent};

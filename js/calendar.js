@@ -1,6 +1,8 @@
 import {showActiveDate, showEvents} from "./events.js";
 
-function renderCalendar (eventListObj, activeDate) {
+function calendar (eventListObj, activeDate) {
+
+  //console.log(activeDate)
   function getCalendar () {
     const calendarElem = document.querySelector("#calendar");
     let runtimeActiveDate = new Date((new Date().getFullYear()), new Date().getMonth());
@@ -55,6 +57,7 @@ function renderCalendar (eventListObj, activeDate) {
     const arrDates = e.currentTarget.querySelectorAll('td');
     const activeDay = e.target.textContent;
     activeDate = new Date((new Date()).setDate(activeDay)); //Преобразование числа(активного дня) в полноценную дату.
+    calendar.activeDate = activeDate;
 
     arrDates.forEach(item => item.classList.remove('table-active'));
     if (activeDay && e.target.tagName === 'TD') {
@@ -70,4 +73,4 @@ function renderCalendar (eventListObj, activeDate) {
   calendarTable.addEventListener('click', handlerDateChange);
 }
 
-export {renderCalendar};
+export {calendar};
