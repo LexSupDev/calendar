@@ -76,6 +76,7 @@ function showEvents (eventListObj, activeDate) {
   });
 
   addButtonsHandler(onDateEventListObj, eventListObj, activeDate);
+  addEventAddHandler(eventListObj, activeDate);
 }
 
 function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
@@ -137,11 +138,22 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
 }
 
 function addEventAddHandler (eventListObj, activeDate) {
+
   const eventAddButtonElem = document.querySelector(".events__addButton");
   const eventAddPopupElem = document.querySelector(".events__addPopup");
 
+  eventAddButtonElem.removeEventListener("click", () => {
+    console.log('remove')
+  });
+
   eventAddButtonElem.addEventListener("click", () => {
-    eventAddPopupElem.classList.toggle("collapse");
+    if (eventAddPopupElem.classList.contains('collapse')) {
+      eventAddPopupElem.classList.remove("collapse");
+    } else {
+      eventAddPopupElem.classList.add("collapse");
+    }
+    console.log('add')
+    console.log(activeDate)
   });
 
   //Добавление нового события

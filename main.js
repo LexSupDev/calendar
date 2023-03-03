@@ -15,7 +15,6 @@ function init () {
   showEvents(eventListObj, activeDate);
   addFilterHandler(eventListObj, activeDate);
   setFiltersData(eventListObj);
-  addEventAddHandler(eventListObj, activeDate);
   addFilterHandler(eventListObj, activeDate);
   setLocalStorage(eventListObj);
 }

@@ -4,7 +4,7 @@ function renderCalendar (eventListObj, activeDate) {
   function getCalendar () {
     const calendarElem = document.querySelector("#calendar");
     let runtimeActiveDate = new Date((new Date().getFullYear()), new Date().getMonth());
-    const day = new Date().getDate();
+    const day = activeDate.getDate();
     const month = runtimeActiveDate.getMonth();
 
     let table = "<table class='calendar__table table table-bordered JS-calendar'><thead><th>пн</th><th>вт</th><th>ср</th><th>чт</th><th>пт</th><th>сб</th><th>вс</th></thead><tr>";
