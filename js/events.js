@@ -1,4 +1,4 @@
-import {filterEvents , setFiltersData} from "./filter.js";
+import {filterEvents , updateFiltersData} from "./filter.js";
 import {calendar} from "./calendar.js";
 
 function readLocalStorage () {
@@ -34,18 +34,15 @@ function setLocalStorage (eventListObj) {
 
 function showActiveDate (activeDate) {
   const eventsDateElem = document.querySelector(".events__date");
-  eventsDateElem.innerHTML = activeDate.toLocaleString("ru-ru", {
-    month: "long",
-    day: "numeric",
-    year: "numeric"
+  eventsDateElem.innerHTML = activeDate.toLocaleString('ru-RU', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
   });
 }
 
 function showEvents (eventListObj, activeDate) {
   let filteredList = filterEvents(eventListObj);
-  let onDateEventListObj = {
-    Events: []
-  }
 
   function filterOnDate (listObj, date) {
     let filterOnDateListObj = {
@@ -64,16 +61,7 @@ function showEvents (eventListObj, activeDate) {
     return filterOnDateListObj;
   }
 
-  onDateEventListObj = filterOnDate(filteredList, activeDate);
-
-  // filteredList.forEach(item => {
-  //   let itemDate = new Date(item['date']);
-  //   if (activeDate.getDate() === itemDate.getDate()
-  //     && activeDate.getMonth() === itemDate.getMonth()
-  //     && activeDate.getFullYear() === itemDate.getFullYear()) {
-  //     onDateEventListObj.Events.push(item);
-  //   }
-  // });
+  let onDateEventListObj = filterOnDate(filteredList, activeDate);
 
   const eventsElem = document.querySelector(".events__list");
   eventsElem.innerHTML = '';
@@ -94,7 +82,7 @@ function showEvents (eventListObj, activeDate) {
     eventsElem.innerHTML += event;
   });
 
-  setFiltersData(filterOnDate(eventListObj.Events, activeDate));
+  updateFiltersData(filterOnDate(eventListObj.Events, activeDate));
   addButtonsHandler(onDateEventListObj, eventListObj, activeDate);
 }
 
@@ -104,7 +92,7 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
   const saveButtons = document.querySelectorAll('.btn--save');
 
   delButtons.forEach( (item, index) => {
-    item.addEventListener('click', (e) => {
+    item.addEventListener('click', () => {
       let j = 0;
       eventListObj.Events.forEach((eventListItem, i) => {
         if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
@@ -113,7 +101,7 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
             console.log('Удалил')
             eventListObj.Events.splice(i, 1);
             setLocalStorage(eventListObj);
-            setFiltersData(eventListObj);
+            updateFiltersData(eventListObj);
             calendar(eventListObj, activeDate);
             showEvents(eventListObj, activeDate);
           }
@@ -142,17 +130,21 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
 
       saveButtons[index].addEventListener('click', (e) => {
         e.preventDefault();
+        let j = 0;
         eventListObj.Events.forEach((eventListItem, i) => {
           if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
-            eventListObj.Events[i].title = currentEventTitleElem.children[0].value;
-            eventListObj.Events[i].startTime = currentEventStartTimeElem.children[0].value;
-            eventListObj.Events[i].duration = currentEventDurationElem.children[0].value;
-            eventListObj.Events[i].location = currentEventLocationElem.children[0].value;
-            eventListObj.Events[i].participants = currentEventParticipantsElem.children[0].value.split(',');
-            setLocalStorage(eventListObj);
-            setFiltersData(eventListObj);
-            calendar(eventListObj, activeDate);
-            showEvents(eventListObj, activeDate);
+            while (j < 1) {
+              j++;
+              eventListObj.Events[i].title = currentEventTitleElem.children[0].value;
+              eventListObj.Events[i].startTime = currentEventStartTimeElem.children[0].value;
+              eventListObj.Events[i].duration = currentEventDurationElem.children[0].value;
+              eventListObj.Events[i].location = currentEventLocationElem.children[0].value;
+              eventListObj.Events[i].participants = currentEventParticipantsElem.children[0].value.split(',');
+              setLocalStorage(eventListObj);
+              updateFiltersData(eventListObj);
+              calendar(eventListObj, activeDate);
+              showEvents(eventListObj, activeDate);
+            }
           }
         });
       });
@@ -194,13 +186,13 @@ function setNewEvent (eventListObj) {
     participants: eventParticipantsElem.value.split(','),
   });
 }
+
 function addEvent (eventListObj) {
   function handlerAddEvent (e, eventListObj, activeDate) {
-    //console.log(activeDate)
     e.preventDefault();
     setNewEvent(eventListObj);
     setLocalStorage(eventListObj);
-    setFiltersData(eventListObj);
+    updateFiltersData(eventListObj);
     calendar(eventListObj, activeDate);
     showEvents(eventListObj, activeDate);
   }

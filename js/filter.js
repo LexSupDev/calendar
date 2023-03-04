@@ -1,6 +1,16 @@
 import {showEvents} from "./events.js";
 
-function setFiltersData (eventListObj) {
+function updateFiltersData (eventListObj) {
+  const filterStartTimeElem = document.querySelector('#filterStartTime');
+  const filterDurationElem = document.querySelector('#filterDuration');
+  const filterLocationElem = document.querySelector('#filterLocation');
+  const filterParticipantsElem = document.querySelector('#filterParticipants');
+
+  filterStartTimeElem.innerHTML = "<option value=\"\" class=\"startTime__listItem\">Все</option>";
+  filterDurationElem.innerHTML = "<option value=\"\" class=\"duration__listItem\">Все</option>";
+  filterLocationElem.innerHTML = "<option value=\"\" class=\"location__listItem\">Все</option>";
+  filterParticipantsElem.innerHTML = "<option value=\"\" class=\"participant__listItem\">Все</option>";
+
   let startTimeSet = new Set;
   let durationSet = new Set;
   let locationSet = new Set;
@@ -13,33 +23,18 @@ function setFiltersData (eventListObj) {
     participantSet.add(item.participants.join(','));
   });
 
-  const filterStartTimeElem = document.querySelector('#filterStartTime');
-  const filterDurationElem = document.querySelector('#filterDuration');
-  const filterLocationElem = document.querySelector('#filterLocation');
-  const filterParticipantsElem = document.querySelector('#filterParticipants');
+  function setFilterData(arr, filterElem, selector) {
+    Array.from(arr).sort((a, b) => a - b).forEach(item => {
+      let elem = `<option value="${item}" class=${selector}>${item}</option>`;
+      filterElem.innerHTML += elem;
+    });
+  }
 
-  filterStartTimeElem.innerHTML = "<option value=\"\" class=\"startTime__listItem\">Все</option>";
-  filterDurationElem.innerHTML = "<option value=\"\" class=\"duration__listItem\">Все</option>";
-  filterLocationElem.innerHTML = "<option value=\"\" class=\"location__listItem\">Все</option>";
-  filterParticipantsElem.innerHTML = "<option value=\"\" class=\"participant__listItem\">Все</option>";
+  setFilterData(startTimeSet, filterStartTimeElem, "startTime__listItem");
+  setFilterData(durationSet, filterDurationElem, "duration__listItem");
+  setFilterData(locationSet, filterLocationElem, "location__listItem");
+  setFilterData(participantSet, filterParticipantsElem, "participants__listItem");
 
-  startTimeSet.forEach(item => {
-    let startTimeElem = `<option value="${item}" class="startTime__listItem">${item}</option>`;
-    filterStartTimeElem.innerHTML += startTimeElem;
-  });
-
-  Array.from(durationSet).sort( (a,b) => a - b).forEach(item => {
-    let durationElem = `<option value="${item}" class="duration__listItem">${item}</option>`;
-    filterDurationElem.innerHTML += durationElem;
-  });
-  locationSet.forEach(item => {
-    let locationElem = `<option value="${item}" class="location__listItem">${item}</option>`;
-    filterLocationElem.innerHTML += locationElem;
-  });
-  participantSet.forEach(item => {
-    let participantsElem = `<option value="${item}" class="participants__listItem">${item}</option>`;
-    filterParticipantsElem.innerHTML += participantsElem;
-  });
 }
 
 function filterEvents (eventListObj) {
@@ -87,4 +82,4 @@ function addFilterHandler (eventListObj, activeDate) {
   filterWrapper.addEventListener('change', () => {showEvents(eventListObj, activeDate)});
 }
 
-export {addFilterHandler, setFiltersData, filterEvents}
+export {addFilterHandler, updateFiltersData, filterEvents};
