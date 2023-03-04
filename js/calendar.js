@@ -1,4 +1,5 @@
-import {showActiveDate, showEvents} from "./events.js";
+import {filterOnDate, showActiveDate, showEvents} from "./events.js";
+import {updateFiltersData} from "./filter.js";
 
 function calendar (eventListObj, activeDate) {
 
@@ -65,6 +66,7 @@ function calendar (eventListObj, activeDate) {
     }
     showActiveDate(activeDate);
     showEvents(eventListObj, activeDate);
+    updateFiltersData(filterOnDate(eventListObj.Events, calendar.activeDate));
   }
 
   getCalendar();

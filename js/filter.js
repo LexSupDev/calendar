@@ -1,4 +1,5 @@
 import {showEvents} from "./events.js";
+import {calendar} from "./calendar.js";
 
 function updateFiltersData (eventListObj) {
   const filterStartTimeElem = document.querySelector('#filterStartTime');
@@ -62,8 +63,6 @@ function filterEvents (eventListObj) {
       }
     }
   }
-  let filteredEventList = filterEventList();
-
   function filterEventList() {
     return {
       Events: eventListObj.Events.slice(0)
@@ -74,12 +73,13 @@ function filterEvents (eventListObj) {
     };
   }
 
+  let filteredEventList = filterEventList();
   return filteredEventList.Events;
 }
 
-function addFilterHandler (eventListObj, activeDate) {
+function addFilterHandler (eventListObj) {
   const filterWrapper = document.querySelector('.filters__wrapper');
-  filterWrapper.addEventListener('change', () => {showEvents(eventListObj, activeDate)});
+  filterWrapper.addEventListener('change', () => {showEvents(eventListObj, calendar.activeDate)});
 }
 
 export {addFilterHandler, updateFiltersData, filterEvents};

@@ -41,26 +41,27 @@ function showActiveDate (activeDate) {
   });
 }
 
-function showEvents (eventListObj, activeDate) {
-  let filteredList = filterEvents(eventListObj);
-
-  function filterOnDate (listObj, date) {
-    let filterOnDateListObj = {
-      Events: []
-    }
-
-    listObj.forEach(item => {
-      let itemDate = new Date(item['date']);
-
-      if (date.getDate() === itemDate.getDate()
-        && date.getMonth() === itemDate.getMonth()
-        && date.getFullYear() === itemDate.getFullYear()) {
-        filterOnDateListObj.Events.push(item);
-      }
-    });
-    return filterOnDateListObj;
+function filterOnDate (listObj, date) {
+  let filterOnDateListObj = {
+    Events: []
   }
 
+  listObj.forEach(item => {
+    let itemDate = new Date(item['date']);
+
+    if (date.getDate() === itemDate.getDate()
+      && date.getMonth() === itemDate.getMonth()
+      && date.getFullYear() === itemDate.getFullYear()) {
+      filterOnDateListObj.Events.push(item);
+    }
+  });
+  return filterOnDateListObj;
+}
+
+function showEvents (eventListObj, activeDate) {
+
+
+  let filteredList = filterEvents(eventListObj);
   let onDateEventListObj = filterOnDate(filteredList, activeDate);
 
   const eventsElem = document.querySelector(".events__list");
@@ -82,7 +83,6 @@ function showEvents (eventListObj, activeDate) {
     eventsElem.innerHTML += event;
   });
 
-  updateFiltersData(filterOnDate(eventListObj.Events, activeDate));
   addButtonsHandler(onDateEventListObj, eventListObj, activeDate);
 }
 
@@ -98,12 +98,11 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
         if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
           while (j < 1) {
             j++;
-            console.log('Удалил')
             eventListObj.Events.splice(i, 1);
             setLocalStorage(eventListObj);
-            updateFiltersData(eventListObj);
             calendar(eventListObj, activeDate);
             showEvents(eventListObj, activeDate);
+            updateFiltersData(filterOnDate(eventListObj.Events, calendar.activeDate));
           }
         }
       });
@@ -141,9 +140,9 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
               eventListObj.Events[i].location = currentEventLocationElem.children[0].value;
               eventListObj.Events[i].participants = currentEventParticipantsElem.children[0].value.split(',');
               setLocalStorage(eventListObj);
-              updateFiltersData(eventListObj);
               calendar(eventListObj, activeDate);
               showEvents(eventListObj, activeDate);
+              updateFiltersData(filterOnDate(eventListObj.Events, calendar.activeDate));
             }
           }
         });
@@ -192,7 +191,7 @@ function addEvent (eventListObj) {
     e.preventDefault();
     setNewEvent(eventListObj);
     setLocalStorage(eventListObj);
-    updateFiltersData(eventListObj);
+    updateFiltersData(filterOnDate(eventListObj.Events, calendar.activeDate));
     calendar(eventListObj, activeDate);
     showEvents(eventListObj, activeDate);
   }
@@ -201,4 +200,4 @@ function addEvent (eventListObj) {
   eventAddPopupFormElem.addEventListener("submit", (e) => {handlerAddEvent(e, eventListObj, calendar.activeDate)});
 }
 
-export {readLocalStorage, setLocalStorage, showActiveDate, showEvents, addEvent, addPopup};
+export {readLocalStorage, setLocalStorage, showActiveDate, showEvents, addEvent, addPopup, filterOnDate};
