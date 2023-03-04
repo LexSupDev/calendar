@@ -3,7 +3,7 @@ import "./js/calendar";
 import "./js/filter";
 import "./js/events";
 
-import {readLocalStorage, setLocalStorage, showActiveDate, showEvents, addEvent} from "./js/events.js";
+import {readLocalStorage, setLocalStorage, showActiveDate, showEvents, addEvent, addPopup} from "./js/events.js";
 import {calendar} from "./js/calendar.js";
 import {addFilterHandler, setFiltersData} from "./js/filter.js";
 
@@ -14,8 +14,7 @@ function init () {
   showActiveDate(calendar.activeDate);
   showEvents(eventListObj, calendar.activeDate);
   addFilterHandler(eventListObj, calendar.activeDate);
-  setFiltersData(eventListObj);
-  addFilterHandler(eventListObj, calendar.activeDate);
+  addPopup();
   addEvent(eventListObj);
   setLocalStorage(eventListObj);
 }

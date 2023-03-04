@@ -5,6 +5,7 @@ function setFiltersData (eventListObj) {
   let durationSet = new Set;
   let locationSet = new Set;
   let participantSet = new Set;
+
   eventListObj.Events.forEach(item => {
     startTimeSet.add(item.startTime);
     durationSet.add(item.duration);

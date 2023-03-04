@@ -45,16 +45,35 @@ function showEvents (eventListObj, activeDate) {
   let filteredList = filterEvents(eventListObj);
   let onDateEventListObj = {
     Events: []
-  };
+  }
 
-  filteredList.forEach(item => {
-    let itemDate = new Date(item['date']);
-    if (activeDate.getDate() === itemDate.getDate()
-      && activeDate.getMonth() === itemDate.getMonth()
-      && activeDate.getFullYear() === itemDate.getFullYear()) {
-      onDateEventListObj.Events.push(item);
+  function filterOnDate (listObj, date) {
+    let filterOnDateListObj = {
+      Events: []
     }
-  });
+
+    listObj.forEach(item => {
+      let itemDate = new Date(item['date']);
+
+      if (date.getDate() === itemDate.getDate()
+        && date.getMonth() === itemDate.getMonth()
+        && date.getFullYear() === itemDate.getFullYear()) {
+        filterOnDateListObj.Events.push(item);
+      }
+    });
+    return filterOnDateListObj;
+  }
+
+  onDateEventListObj = filterOnDate(filteredList, activeDate);
+
+  // filteredList.forEach(item => {
+  //   let itemDate = new Date(item['date']);
+  //   if (activeDate.getDate() === itemDate.getDate()
+  //     && activeDate.getMonth() === itemDate.getMonth()
+  //     && activeDate.getFullYear() === itemDate.getFullYear()) {
+  //     onDateEventListObj.Events.push(item);
+  //   }
+  // });
 
   const eventsElem = document.querySelector(".events__list");
   eventsElem.innerHTML = '';
@@ -75,6 +94,7 @@ function showEvents (eventListObj, activeDate) {
     eventsElem.innerHTML += event;
   });
 
+  setFiltersData(filterOnDate(eventListObj.Events, activeDate));
   addButtonsHandler(onDateEventListObj, eventListObj, activeDate);
 }
 
@@ -85,14 +105,18 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
 
   delButtons.forEach( (item, index) => {
     item.addEventListener('click', (e) => {
-      e.target.parentElement.parentElement.remove();
+      let j = 0;
       eventListObj.Events.forEach((eventListItem, i) => {
         if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
-          eventListObj.Events.splice(i, 1);
-          setLocalStorage(eventListObj);
-          setFiltersData(eventListObj);
-          calendar(eventListObj, activeDate);
-          showEvents(eventListObj, activeDate);
+          while (j < 1) {
+            j++;
+            console.log('Удалил')
+            eventListObj.Events.splice(i, 1);
+            setLocalStorage(eventListObj);
+            setFiltersData(eventListObj);
+            calendar(eventListObj, activeDate);
+            showEvents(eventListObj, activeDate);
+          }
         }
       });
     });
@@ -136,16 +160,21 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
   });
 }
 
-function handlerAddPopup () {
+function addPopup () {
+  function handlerAddPopup () {
 
-  const newEventPopupElem = document.querySelector(".events__addPopup");
+    const newEventPopupElem = document.querySelector(".events__addPopup");
 
-  if (newEventPopupElem.classList.contains('collapse')) {
-    newEventPopupElem.classList.remove("collapse");
-  } else {
-    newEventPopupElem.classList.add("collapse");
+    if (newEventPopupElem.classList.contains('collapse')) {
+      newEventPopupElem.classList.remove("collapse");
+    } else {
+      newEventPopupElem.classList.add("collapse");
+    }
+
   }
 
+  const newEventButtonElem = document.querySelector('.events__addButton');
+  newEventButtonElem.addEventListener("click", handlerAddPopup);
 }
 
 function setNewEvent (eventListObj) {
@@ -177,16 +206,7 @@ function addEvent (eventListObj) {
   }
 
   const eventAddPopupFormElem = document.querySelector(".addEventPopup__form");
-  console.log(calendar.activeDate)
   eventAddPopupFormElem.addEventListener("submit", (e) => {handlerAddEvent(e, eventListObj, calendar.activeDate)});
-
 }
 
-
-const newEventButtonElem = document.querySelector('.events__addButton');
-newEventButtonElem.addEventListener("click", handlerAddPopup);
-
-
-
-
-export {readLocalStorage, setLocalStorage, showActiveDate, showEvents, addEvent};
+export {readLocalStorage, setLocalStorage, showActiveDate, showEvents, addEvent, addPopup};
