@@ -3,7 +3,6 @@ import {updateFiltersData} from "./filter.js";
 
 function calendar (eventListObj, activeDate) {
 
-  //console.log(activeDate)
   function getCalendar () {
     const calendarElem = document.querySelector("#calendar");
     let runtimeActiveDate = new Date((new Date().getFullYear()), new Date().getMonth());

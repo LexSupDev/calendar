@@ -91,11 +91,20 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
   const delButtons = document.querySelectorAll('.btn--del');
   const saveButtons = document.querySelectorAll('.btn--save');
 
+  function isEqual (a, b) {
+     return a.title === b.title &&
+            a.date === b.date &&
+            a.startTime === b.startTime &&
+            a.duration === b.duration &&
+            a.location === b.location &&
+            a.participants === b.participants
+  }
+
   delButtons.forEach( (item, index) => {
     item.addEventListener('click', () => {
       let j = 0;
       eventListObj.Events.forEach((eventListItem, i) => {
-        if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
+        if (isEqual(eventListItem, onDateEventListObj.Events[index])) {
           while (j < 1) {
             j++;
             eventListObj.Events.splice(i, 1);
@@ -131,7 +140,7 @@ function addButtonsHandler (onDateEventListObj, eventListObj, activeDate) {
         e.preventDefault();
         let j = 0;
         eventListObj.Events.forEach((eventListItem, i) => {
-          if (JSON.stringify(eventListItem) === JSON.stringify(onDateEventListObj.Events[index])) {
+          if (isEqual(eventListItem, onDateEventListObj.Events[index])) {
             while (j < 1) {
               j++;
               eventListObj.Events[i].title = currentEventTitleElem.children[0].value;
